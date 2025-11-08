@@ -1,0 +1,83 @@
+\input{aux_texs/modules}
+\input{aux_texs/commands}
+\usepackage{wrapfig}
+\usepackage{siunitx}
+\usepackage[bottom]{footmisc}
+\usepackage{ragged2e}
+\usepackage{imakeidx}
+\usepackage{tocbibind}
+\usepackage{subcaption}
+\captionsetup[sub]{font=large}
+\usepackage{todonotes}
+\setlength{\marginparwidth}{0.5cm}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+
+\tikzstyle{block} = [rectangle, draw, minimum height=1.5cm, minimum width=2cm, text centered]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\usepackage{pgfplots}
+\usepackage{fancyhdr}
+\usepgfplotslibrary{fillbetween}
+\usepackage{amsmath}
+\usepackage{amsmath, cancel, mathtools}
+\usepackage{empheq}
+
+\makeindex
+
+\begin{document}
+
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+\begin{titlepage}
+
+\thispagestyle{empty}
+
+\begin{center}
+    \includegraphics[scale=1.2]{pics/carátula/fiuba.jpg}\\
+\end{center}
+
+\vspace{2cm}
+
+\begin{center}
+	{\LARGE \underline{\textbf{Redes de Comunicaciones (TB067)}}}\\[0.5cm]
+	{\LARGE \textbf{Trabajo Práctico 1 
+}}\\[0.5cm] 
+    {\LARGE \textbf{Nivel de Aplicaciones y de Transporte del Modelo TCP/IP}}\\[0.5cm]
+    {\normalsize \textbf{1°C 2025}}\\[.25cm]
+\end{center}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \multicolumn{3}{|c|}{\textbf{Integrantes}}    \\ \hline
+    \multicolumn{1}{|l|}{Nombre y apellido} & Padrón & Correo \\ \hline
+    \multicolumn{1}{|l|}{Catalina Aureano Garimaldi}   & 110385 & caureano@fi.uba.ar \\ \hline
+    \multicolumn{1}{|l|}{Emilia Cavalitto}   & 109394 & ecavalitto@fi.uba.ar \\ \hline
+
+    \end{tabular}
+\end{table}
+\end{titlepage}
+
+\tableofcontents
+
+%En cada uno de los archivos .tex que creé vamos escribiendo la resolución. Lo hice en .tex diferentes para que sea más ordenado
+\input{INTRODUCCIÓN}
+\input{A}
+\input{B}
+\input{C}
+\input{D}
+\input{E}
+\input{F}
+\input{CONCLUSIONES}
+
+%--REFERENCIAS (si es que usamos alguna)--
+\nocite{*}  % Incluir todas las referencias del archivo .bib, sin citarlas en el texto.
+\bibliographystyle{IEEEtran}
+\bibliography{bibliography}
+\printindex
+
+
+\end{document}
