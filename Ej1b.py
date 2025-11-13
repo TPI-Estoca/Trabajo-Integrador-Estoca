@@ -1,4 +1,5 @@
 # Cargo las librebrerías necesarias
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
@@ -43,31 +44,27 @@ def calcular_psd_lpc(a, G, fs, P, f):
 
     return S_X
 
-def comparar_psd(x, fs, a, G, P):
-    # Compara el periodograma de la señal original con la PSD LPC.
+def comparar_psd(x, fs, a, G, P, titulo="Comparación entre Periodograma y PSD LPC"):
     # 1. Periodograma original
     f, Pxx = calcular_periodograma(x, fs)
-    Pxx_db = 10 * np.log10(Pxx + 1e-12)  # Convertimos a dB
+    Pxx_db = 10 * np.log10(Pxx + 1e-12)
 
     # 2. PSD del modelo LPC
     psd_lpc = calcular_psd_lpc(a, G, fs, P, f)
-    psd_lpc_db = 10 * np.log10(psd_lpc + 1e-12)  # Convertimos a dB
+    psd_lpc_db = 10 * np.log10(psd_lpc + 1e-12)
 
-    # 3. Aseguramos que las escalas están bien alineadas
-    # Normalizamos las escalas para que la comparación sea válida
+    # 3. Ajuste de escala
     max_psd_lpc_db = np.max(psd_lpc_db)
     max_periodograma_db = np.max(Pxx_db)
-
-    # Ajustamos la escala de la PSD LPC para que tenga la misma magnitud que el periodograma
     psd_lpc_db -= (max_psd_lpc_db - max_periodograma_db)
 
-    # 4. Graficamos ambos
+    # 4. Gráfico
     plt.figure(figsize=(10, 6))
     plt.plot(f, Pxx_db, label='Periodograma (original)', alpha=0.7)
     plt.plot(f, psd_lpc_db, label='PSD (modelo LPC)', color='r', linestyle='--')
     plt.xlabel('Frecuencia (Hz)')
     plt.ylabel('Densidad espectral de potencia (dB/Hz)')
-    plt.title('Comparación entre Periodograma y PSD LPC')
+    plt.title(titulo)
     plt.legend()
     plt.grid(True)
     plt.show()
@@ -93,28 +90,26 @@ def graficar_respuesta_temporal(x, fs, titulo="Señal en el tiempo"):
     plt.tight_layout()
     plt.show()
 
+
 if __name__ == "__main__":
-    fa, xa = leer_wav_mono_norm(r"C:\Users\ecava\OneDrive\Documents\Facultad Emi\2C2025\ESTOCA\TP Integrador\AudiosEj1\a.wav")
-    fe, xe = leer_wav_mono_norm(r"C:\Users\ecava\OneDrive\Documents\Facultad Emi\2C2025\ESTOCA\TP Integrador\AudiosEj1\e.wav")
-    fs, xs = leer_wav_mono_norm(r"C:\Users\ecava\OneDrive\Documents\Facultad Emi\2C2025\ESTOCA\TP Integrador\AudiosEj1\s.wav")
-    fsh, xsh = leer_wav_mono_norm(r"C:\Users\ecava\OneDrive\Documents\Facultad Emi\2C2025\ESTOCA\TP Integrador\AudiosEj1\sh.wav")
+    # --- Parámetros generales ---
+    ruta = r"C:\Users\ecava\OneDrive\Documents\Facultad Emi\2C2025\ESTOCA\TP Integrador\AudiosEj1"
+    nombres = ["a", "e", "s", "sh"]
+    ordenes_P = [5, 10, 30]  # distintos órdenes LPC a analizar
 
-    # Gráfico temporal
-    graficar_respuesta_temporal(xa, fa, titulo="Señal 'a.wav' en el tiempo")
-    graficar_respuesta_temporal(xe, fe, titulo="Señal 'e.wav' en el tiempo")
-    graficar_respuesta_temporal(xs, fs, titulo="Señal 's.wav' en el tiempo")
-    graficar_respuesta_temporal(xsh, fsh, titulo="Señal 'sh.wav' en el tiempo")
+    # --- Procesamiento de cada audio ---
+    for nombre in nombres:
+        fs, x = leer_wav_mono_norm(os.path.join(ruta, f"{nombre}.wav"))
+        graficar_respuesta_temporal(x, fs, titulo=f"Señal '{nombre}.wav' en el tiempo")
 
-    # Calcular LPC para los diferentes P
-    P = 5
-
-    aa, Ga = param_lpc(xa, P)
-    ae, Ge = param_lpc(xe, P)
-    ass, Gs = param_lpc(xs, P)
-    ash, Gsh = param_lpc(xsh, P)
-
-    # Comparar PSD y Periodograma
-    comparar_psd(xa, fa, aa, Ga, P)
-    comparar_psd(xe, fe, ae, Ge, P)
-    comparar_psd(xs, fs, ass, Gs, P)
-    comparar_psd(xsh, fsh, ash, Gsh, P)
+        # Para cada valor de P, calculamos y comparamos PSD
+        for P in ordenes_P:
+            a, G = param_lpc(x, P)
+            comparar_psd(
+                x,
+                fs,
+                a,
+                G,
+                P,
+                titulo=f"Comparación PSD: señal '{nombre}' (P={P})"
+)
