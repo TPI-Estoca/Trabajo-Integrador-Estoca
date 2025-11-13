@@ -4,8 +4,11 @@ from scipy.io import wavfile
 from scipy.linalg import toeplitz
 import numpy as np
 
-# Ruta de los audios
-ruta_audios = r"C:\Users\ecava\OneDrive\Documents\Facultad Emi\2C2025\ESTOCA\TP Integrador\AudiosEj1"
+# Ruta a la carpeta del script actual
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Carpeta donde están los audios (por ejemplo: ./AudiosEj1)
+ruta_audios = os.path.join(base_dir, "AudiosEj1")
 
 # --- EJERCICIO 1A---
 def param_lpc(x, P):

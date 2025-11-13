@@ -7,8 +7,11 @@ from scipy import signal
 
 from Ej1a import param_lpc
 
-# Ruta de los audios
-ruta_audios = r"C:\Users\ecava\OneDrive\Documents\Facultad Emi\2C2025\ESTOCA\TP Integrador\AudiosEj1"
+# Ruta a la carpeta del script actual
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Carpeta donde están los audios (por ejemplo: ./AudiosEj1)
+ruta = os.path.join(base_dir, "AudiosEj1")
 
 # --- EJERCICIO 1B---
 def calcular_periodograma(x, fs):
@@ -112,4 +115,4 @@ if __name__ == "__main__":
                 G,
                 P,
                 titulo=f"Comparación PSD: señal '{nombre}' (P={P})"
-)
+            )
