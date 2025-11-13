@@ -1,13 +1,13 @@
-#----------CARGA DE AUDIOS-----------
+# Cargo las librebrerías necesarias
 import os
 from scipy.io import wavfile
 from scipy.linalg import toeplitz
 import numpy as np
 
 # Ruta de los audios
-ruta_audios = 'Archivos-20251030'  # -> Cargo los audios
+ruta_audios = r"C:\Users\ecava\OneDrive\Documents\Facultad Emi\2C2025\ESTOCA\TP Integrador\AudiosEj1"
 
-# --- EJERCICIO ---
+# --- EJERCICIO 1A---
 def param_lpc(x, P):
   x = np.asarray(x, dtype=float) # -> Me aseguro que "x" sea un array de flotantes. Si "wavfile.read()" me da enteros los paso a float.
   N = len(x) # -> Cantidad de muestras del audio.
@@ -60,7 +60,7 @@ def analizar_archivo_wav(nombre_archivo, ordenes=[5, 10, 30]):
 
     return fs, x
 
-
+#----------CARGA DE AUDIOS-----------
 # -> Llamo la función para los diferentes audios e imprimo los paráemtros pedidos para cada una de los
 if __name__ == "__main__":
     analizar_archivo_wav("a.wav")       # -> Analizlo la vocal 'a'
