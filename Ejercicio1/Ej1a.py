@@ -42,10 +42,9 @@ def leer_wav_mono_norm(path):
     x /= (np.max(np.abs(x)) + 1e-12)
     return fs, x
 
-def analizar_archivo_wav(nombre_archivo, ordenes=[5, 10, 30]):
+def analizar_archivo_wav(nombre_archivo, ordenes=[5, 10, 30], archivo_salida="Resultados_Ej1a.txt"):
     """
     Calcula los coeficientes LPC y la ganancia para un archivo WAV dado.
-
     Parámetros
     ----------
     nombre_archivo : str
@@ -56,17 +55,32 @@ def analizar_archivo_wav(nombre_archivo, ordenes=[5, 10, 30]):
     # Construye la ruta completa al archivo de audio
     ruta_completa = os.path.join(ruta_audios, nombre_archivo)
     fs, x = leer_wav_mono_norm(ruta_completa)
-    print(f"\n=== {nombre_archivo} ===")
-    for P in ordenes:
-        a, G = param_lpc(x, P)
-        print(f"P={P:2d} | G={G:.6f} | a[0:{P}]={a[:P]}")
+    
+    archivo_salida = os.path.join(base_dir, archivo_salida)
+    
+    # Bloque para imprimir y guardar datos en txt
+    # Creamos el texto a imprimir/guardar
+    header = f"\n=== {nombre_archivo} ===\n"
+    print(header)
+
+    # Abrimos el archivo en modo append para ir acumulando resultados
+    with open(archivo_salida, "a", encoding="utf-8") as f:
+
+        f.write(header)
+
+        for P in ordenes:
+            a, G = param_lpc(x, P)
+            linea = f"P={P:2d} | G={G:.6f} | a[0:{P}]={a[:P]}\n"
+
+            print(linea, end="")   # sigue imprimiendo en consola
+            f.write(linea)         # también lo guarda en el .txt
 
     return fs, x
 
 #----------CARGA DE AUDIOS-----------
 # -> Llamo la función para los diferentes audios e imprimo los paráemtros pedidos para cada una de los
 if __name__ == "__main__":
-    analizar_archivo_wav("a.wav")       # -> Analizlo la vocal 'a'
-    analizar_archivo_wav("e.wav")       # -> Analizlo la vocal 'e'
-    analizar_archivo_wav("s.wav")       # -> Analizo la consonante 's'
-    analizar_archivo_wav("sh.wav")      # -> Analizo el sonido de consonantes 'sh'
+    nombres = ["a", "e", "s", "sh"]
+
+    for nombre in nombres:
+        analizar_archivo_wav(f"{nombre}.wav")

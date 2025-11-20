@@ -13,6 +13,10 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 # Carpeta donde están los audios (por ejemplo: ./AudiosEj1)
 ruta = os.path.join(base_dir, "AudiosEj1")
 
+# Carpeta donde se guardarán las imágenes generadas
+ruta_imagenes = os.path.join(base_dir, "Imagenes_Ej1b")
+os.makedirs(ruta_imagenes, exist_ok=True)
+
 # --- EJERCICIO 1B---
 def calcular_periodograma(x, fs):
     N = len(x)
@@ -70,7 +74,12 @@ def comparar_psd(x, fs, a, G, P, titulo="Comparación entre Periodograma y PSD L
     plt.title(titulo)
     plt.legend()
     plt.grid(True)
-    plt.show()
+
+    # --- Guardar figura ---
+    nombre_sin_espacios = titulo.replace(" ", "_").replace(":", "")
+    nombre_archivo = os.path.join(ruta_imagenes, f"{nombre_sin_espacios}.png")
+    plt.savefig(nombre_archivo, dpi=300)
+    plt.close()  # cierra la figura para evitar acumulación en memoria
 
 # --- Helper para leer y normalizar ---
 def leer_wav_mono_norm(path):
@@ -91,12 +100,12 @@ def graficar_respuesta_temporal(x, fs, titulo="Señal en el tiempo"):
     plt.title(titulo)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
-    plt.show()
+    plt.savefig(os.path.join(ruta_imagenes, f"Temporal_{nombre}.png"), dpi=300)
+    plt.close()
 
 
 if __name__ == "__main__":
     # --- Parámetros generales ---
-    ruta = r"C:\Users\ecava\OneDrive\Documents\Facultad Emi\2C2025\ESTOCA\TP Integrador\AudiosEj1"
     nombres = ["a", "e", "s", "sh"]
     ordenes_P = [5, 10, 30]  # distintos órdenes LPC a analizar
 
