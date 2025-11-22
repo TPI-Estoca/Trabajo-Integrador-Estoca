@@ -1,0 +1,27 @@
+============================================================
+EJERCICIO 2A - Detección de Pitch con LPC
+============================================================
+
+=== a.wav (fs=14700 Hz) ===
+  Orden P=10 (G=0.100222):
+    alpha=0.30 | Pitch: 201.37 Hz (SONORO)
+    alpha=0.50 | Sin pitch detectado (SORDO)
+    alpha=0.70 | Sin pitch detectado (SORDO)
+
+=== e.wav (fs=14700 Hz) ===
+  Orden P=10 (G=0.099021):
+    alpha=0.30 | Pitch: 201.37 Hz (SONORO)
+    alpha=0.50 | Pitch: 201.37 Hz (SONORO)
+    alpha=0.70 | Sin pitch detectado (SORDO)
+
+=== s.wav (fs=14700 Hz) ===
+  Orden P=10 (G=0.189926):
+    alpha=0.30 | Sin pitch detectado (SORDO)
+    alpha=0.50 | Sin pitch detectado (SORDO)
+    alpha=0.70 | Sin pitch detectado (SORDO)
+
+=== sh.wav (fs=14700 Hz) ===
+  Orden P=10 (G=0.093750):
+    alpha=0.30 | Sin pitch detectado (SORDO)
+    alpha=0.50 | Sin pitch detectado (SORDO)
+    alpha=0.70 | Sin pitch detectado (SORDO)

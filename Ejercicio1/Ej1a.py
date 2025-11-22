@@ -82,5 +82,14 @@ def analizar_archivo_wav(nombre_archivo, ordenes=[5, 10, 30], archivo_salida="Re
 if __name__ == "__main__":
     nombres = ["a", "e", "s", "sh"]
 
-    for nombre in nombres:
-        analizar_archivo_wav(f"{nombre}.wav")
+# Limpiar archivo de salida al inicio y agregar encabezado
+archivo_salida = os.path.join(base_dir, "Resultados_Ej1a.txt")
+with open(archivo_salida, "w", encoding="utf-8") as f:
+    f.write("=" * 60 + "\n")
+    f.write("EJERCICIO 1A - Estimación de Parámetros LPC\n")
+    f.write("=" * 60 + "\n")
+
+for nombre in nombres:
+    analizar_archivo_wav(f"{nombre}.wav")
+
+print(f"\n✓ Resultados guardados en: {archivo_salida}")
