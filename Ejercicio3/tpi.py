@@ -117,9 +117,10 @@ def plot_spectrogram(signal_audio, fs, title, filename):
     print(f"Espectrograma '{filename}' generado con éxito.")
 
 
-def process_lpc(signal_audio, fs, alpha, L, P, ventana, hop, modo_pitch, i_audio):
+def process_lpc(signal_audio, fs, alpha, L, P, ventana, hop, modo_pitch, i_audio, output_dir):
     """
     Realiza la codificación y decodificación LPC para un modo de pitch específico.
+    output_dir: Carpeta donde se guardarán los resultados.
     """
     
     # --- Codificación LPC ---
@@ -141,22 +142,18 @@ def process_lpc(signal_audio, fs, alpha, L, P, ventana, hop, modo_pitch, i_audio
         
         # CLASIFICACIÓN Y PITCH USADO (fp_used)
         if modo_pitch == 'a':
-            # Ejercicio 3(a): Pitch estimado
             fp_used = fp_est if max_acf > alpha else 0
         
         elif modo_pitch == 'b':
-            # Ejercicio 3(b): Pitch fijo (200 Hz)
             if np.max(np.abs(segmento)) < 0.05: # Umbral de silencio
                 fp_used = 0 
             else:
                 fp_used = 200.0 
         
         elif modo_pitch == 'c':
-            # Ejercicio 3(c): Sin pitch (Todo es Ruido Blanco/Sordo)
             fp_used = 0 
             
         elif modo_pitch == 'd':
-            # Ejercicio 3(d): Pitch Sintético
             fp_used = pitch_sintetico(i, fs)
         
         else:
@@ -188,7 +185,6 @@ def process_lpc(signal_audio, fs, alpha, L, P, ventana, hop, modo_pitch, i_audio
 
 
     # --- Guardar y Graficar ---
-    # Recortar el padding, normalizar y escalar a 16 bits
     signal_recons_final = signal_recons[:len(signal_audio)]
     max_abs = np.max(np.abs(signal_recons_final))
     if max_abs > 1e-10:
@@ -198,55 +194,63 @@ def process_lpc(signal_audio, fs, alpha, L, P, ventana, hop, modo_pitch, i_audio
 
     audio_int16 = (signal_recons_norm * 32767).astype(np.int16)
 
-    # Crear carpeta si no existe
-    if not os.path.exists('audios_reconstruidos'):
-        os.makedirs('audios_reconstruidos')
-    if not os.path.exists('espectrogramas'):
-        os.makedirs('espectrogramas')
-
     # Guardar audio
-    filename_wav = f'audios_reconstruidos/audio_{i_audio}-reconstruido_{modo_pitch}.wav'
+    filename_wav = os.path.join(output_dir, f'audio_{i_audio}_recons_{modo_pitch}.wav')
     wav.write(filename_wav, fs, audio_int16)
 
     # Generar espectrograma
-    filename_spec = f'espectrogramas/espectrograma_reconstruido_{i_audio}_{modo_pitch}.png'
-    plot_spectrogram(signal_recons_final, fs, f'Espectrograma Reconstruido (Modo {modo_pitch.upper()})', filename_spec)
-
-    print(f"✅ Proceso LPC completado para el modo {modo_pitch.upper()}. Audio guardado en {filename_wav}")
+    filename_spec = os.path.join(output_dir, f'espectrograma_recons_{modo_pitch}.png')
+    plot_spectrogram(signal_recons_final, fs, f'Reconstruido (Audio {i_audio}, Modo {modo_pitch.upper()})', filename_spec)
 
     return signal_recons_final
 
 
-# --- Código Principal (Iteración) ---
+# --- Código Principal (Iteración Múltiple) ---
 if __name__ == '__main__': 
     
-    # -- Parámetros generales --
+    # -- Parámetros generales (usando tus valores optimizados) --
     fs = 8000 
-    L = 180    # Largo de cada segmento (15ms a 8kHz)
+    L = 180
     ventana = np.hamming(L)
-    P = 15     # Orden del predictor
-    alpha = 0.2 # Umbral para detección sonoro/sordo
+    P = 15     
+    alpha = 0.2 
     hop = L // 2 
     
-    # -- Archivo de Audio --
-    i_audio = '01'
-    try:
-        fs, signal_audio = wav.read(f'..\\AudiosEj3\\audio_{i_audio}.wav')
-    except FileNotFoundError:
-        fs, signal_audio = wav.read(f'audio_{i_audio}.wav') 
-
-    signal_audio = signal_audio.astype(float) 
-
-    # 1. Generar espectrograma original una sola vez
-    if not os.path.exists('espectrogramas'):
-        os.makedirs('espectrogramas')
-        
-    plot_spectrogram(signal_audio, fs, f'Espectrograma Original (Audio {i_audio})', f'espectrogramas/espectrograma_original_{i_audio}.png')
-    
-    
-    # -- Iteración sobre los 4 modos del ejercicio --
+    # Lista de audios a procesar
+    audio_indices = ['01', '02', '03', '04']
     modos = ['a', 'b', 'c', 'd']
     
-    for modo in modos:
-        print(f"\n--- Ejecutando Ejercicio 3({modo}) ---")
-        process_lpc(signal_audio, fs, alpha, L, P, ventana, hop, modo, i_audio)
+    base_input_path = 'AudiosEj3\\' # Ajusta esta ruta si es necesario
+
+    for i_audio in audio_indices:
+        
+        # 1. Definir y crear la carpeta de resultados para este audio
+        output_dir = f'resultados_audio_{i_audio}_lpc'
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+            print(f"\n--- Creada carpeta de resultados: {output_dir} ---")
+        
+        # 2. Cargar el audio original
+        try:
+            audio_path = os.path.join(base_input_path, f'audio_{i_audio}.wav')
+            fs, signal_audio = wav.read(audio_path)
+        except FileNotFoundError:
+            # Fallback por si la ruta relativa falla
+            audio_path = f'audio_{i_audio}.wav'
+            fs, signal_audio = wav.read(audio_path) 
+
+        signal_audio = signal_audio.astype(float) 
+
+        # 3. Generar espectrograma original una sola vez
+        original_spec_filename = os.path.join(output_dir, f'espectrograma_original.png')
+        plot_spectrogram(signal_audio, fs, f'Espectrograma Original (Audio {i_audio})', original_spec_filename)
+        
+        
+        # 4. Iterar sobre los 4 modos del ejercicio
+        for modo in modos:
+            print(f"\n--- Procesando Audio {i_audio}, Ejercicio 3({modo}) ---")
+            process_lpc(signal_audio, fs, alpha, L, P, ventana, hop, modo, i_audio, output_dir)
+            
+    print("\n********************************************************")
+    print("¡Procesamiento de los 4 audios con los 4 modos completado!")
+    print("********************************************************")
