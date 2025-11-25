@@ -1,4 +1,21 @@
-# Cargo las librerías necesarias
+# ==============================================================================
+# EJERCICIO 2B: Síntesis y Comparación de Fonemas Aislados con LPC
+# ==============================================================================
+#
+# OBJETIVO: Este script demuestra la síntesis del habla (fonemas) usando el modelo
+# Fuente-Filtro de LPC. Para un fonema dado ('a.wav', 's.wav', etc.):
+# 1. Analiza el audio original para obtener los coeficientes LPC (Filtro).
+# 2. Detecta el Pitch (f_p) para determinar la excitación (Fuente).
+# 3. Sintetiza la señal generando una excitación (pulsos o ruido) y filtrándola.
+# 4. Compara el Periodograma de la señal original y la sintetizada para validar 
+#    la fidelidad del modelo LPC para diferentes órdenes (P).
+#
+# Requiere que el archivo 'Ej2a.py' contenga las funciones 'param_lpc' y 
+# 'pitch_lpc' necesarias.
+#
+# ==============================================================================
+
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt

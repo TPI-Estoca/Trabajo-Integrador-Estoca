@@ -1,3 +1,22 @@
+# ==============================================================================
+# TRABAJO PRÁCTICO INTEGRADOR (TPI) - EJERCICIO 3: VOCODER LPC COMPLETO
+# ==============================================================================
+#
+# OBJETIVO PRINCIPAL: Implementar un vocoder completo que realiza Codificación 
+# (Análisis) y Decodificación (Síntesis) de la voz, siguiendo el Modelo 
+# Fuente-Filtro de LPC. El script procesa MÚLTIPLES archivos de audio y evalúa 
+# CUATRO modos de excitación (3a, 3b, 3c, 3d) para demostrar el impacto de 
+# la fuente (pitch) en la calidad perceptual.
+#
+# ESTRUCTURA DEL MODELO:
+# - FILTRO (Tracto Vocal): Modelado por los coeficientes 'a' y la Ganancia 'G'.
+# - FUENTE (Cuerdas Vocales): Modelada por un Tren de Impulsos (Pitch > 0) o 
+#                             Ruido Blanco (Pitch = 0).
+#
+# La función 'param_lpc' y 'pitch_lpc' son las bases de este análisis.
+#
+# ==============================================================================
+
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.signal as signal

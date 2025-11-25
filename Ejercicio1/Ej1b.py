@@ -1,4 +1,19 @@
-# Cargo las librebrerías necesarias
+# ==============================================================================
+# EJERCICIO 1B: Comparación de Espectros (Periodograma vs. PSD LPC)
+# ==============================================================================
+#
+# OBJETIVO: Este script compara la Densidad Espectral de Potencia (PSD) 
+# paramétrica estimada por el modelo LPC con el Periodograma (espectro real) 
+# de los fonemas aislados.
+#
+# El LPC solo modela la ENVOLVENTE espectral (los Formantes). Al superponer 
+# ambos gráficos, se demuestra la precisión del modelo All-Pole para diferentes 
+# órdenes (P) de predicción.
+#
+# Requiere que el archivo 'Ej1a.py' contenga la función 'param_lpc'.
+#
+# ==============================================================================
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt

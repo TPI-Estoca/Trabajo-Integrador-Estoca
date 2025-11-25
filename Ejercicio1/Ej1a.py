@@ -1,4 +1,17 @@
-# Cargo las librebrerías necesarias
+# ==============================================================================
+# EJERCICIO 1A: Estimación de Parámetros LPC (a y G)
+# ==============================================================================
+#
+# OBJETIVO: Implementar la función param_lpc(xs, P) que calcula los coeficientes 
+# de predicción lineal (a_k) y la ganancia del error (G) para un segmento 
+# de señal, utilizando el método de Autocorrelación de Yule-Walker.
+# 
+# NOTA: Se utiliza la autocorrelación SESGADA (np.correlate sin división por N-k) 
+# para mantener la estabilidad numérica.
+#
+# ==============================================================================
+
+
 import os
 from scipy.io import wavfile
 from scipy.linalg import toeplitz
