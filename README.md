@@ -1,7 +1,10 @@
 # Descripción general del proyecto
 - **Proyecto**: Trabajo-Integrador-Estoca (TPI)  
 - **Alcance**: Ejercicios y vocoder final implementando LPC (modelo fuente–filtro) para análisis y síntesis de habla.  
-- **Lenguajes**: Python 3  
+- **Integrantes**:
+      - Francisco Javier Moya
+      - Ulises Ferrero
+      - Emilia Cavalitto
 
 ## Estructura del repositorio
 - **`Ejercicio1/`**: Estimación de parámetros LPC y comparación de PSD.  
